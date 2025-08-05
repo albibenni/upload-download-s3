@@ -1,0 +1,41 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: dockerfile
+    env_file: .env
+    depends_on:
+      - postgres
+      - s3ninja
+    networks:
+      - network
+
+  postgres:
+    hostname: database.local
+    image: postgres:15-alpine
+    env_file: .env
+    expose:
+      - '5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - network
+
+  s3ninja:
+    hostname: storage.local
+    image: scireum/s3-ninja:latest
+    expose:
+      - '9000'
+    volumes:
+      - ./docker/storage_data:/home/sirius/data
+    networks:
+      - network
+
+volumes:
+  postgres_data:
+  s3ninja_data:
+
+networks:
+  bonusx-network:
+    driver: bridge

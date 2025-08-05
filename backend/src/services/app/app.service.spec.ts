@@ -1,9 +1,9 @@
-import { TestBed } from '@suites/unit';
-import { MessageEntity } from '../../entities/message.entity';
-import { AppService } from './app.service';
-import { IAppService } from './app.service.interface';
+import { TestBed } from "@suites/unit";
+import { MessageEntity } from "../../entities/message.entity";
+import { AppService } from "./app.service";
+import { IAppService } from "./app.service.interface";
 
-describe('AppService', () => {
+describe("AppService", () => {
   let appService: IAppService;
 
   beforeAll(async () => {
@@ -12,8 +12,8 @@ describe('AppService', () => {
     appService = unit;
   });
 
-  describe('getHello', () => {
-    it('should return an instance of IMessageEntity', () => {
+  describe("getHello", () => {
+    it("should return an instance of IMessageEntity", () => {
       const result = appService.getHello();
 
       expect(result).toBeInstanceOf(MessageEntity);

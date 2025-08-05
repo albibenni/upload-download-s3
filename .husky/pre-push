@@ -1,1 +1,1 @@
-yarn pre-push
+yarn test

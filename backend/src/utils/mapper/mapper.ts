@@ -3,7 +3,7 @@ import {
   ClassTransformOptions,
   instanceToPlain,
   plainToClass,
-} from 'class-transformer';
+} from "class-transformer";
 
 export class Mapper {
   private static _DEFAULT_OPTIONS: ClassTransformOptions = {

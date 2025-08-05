@@ -1,39 +1,39 @@
-import * as ClassTransformer from 'class-transformer';
-import { Mapper } from './mapper';
+import * as ClassTransformer from "class-transformer";
+import { Mapper } from "./mapper";
 
 class MockData {
   @ClassTransformer.Expose()
   name: string;
 }
 
-describe('common mapper', () => {
+describe("common mapper", () => {
   const defaultOptions = {
     excludeExtraneousValues: true,
     exposeDefaultValues: true,
   };
 
-  describe('mapData', () => {
-    it('should return mapped data from plainToClass', () => {
-      const expectedResult = { name: 'John' };
+  describe("mapData", () => {
+    it("should return mapped data from plainToClass", () => {
+      const expectedResult = { name: "John" };
       jest
-        .spyOn(ClassTransformer, 'plainToClass')
+        .spyOn(ClassTransformer, "plainToClass")
         .mockReturnValue(expectedResult);
 
-      const result = Mapper.mapData(MockData, { name: 'John' });
+      const result = Mapper.mapData(MockData, { name: "John" });
 
       expect(result).toBe(expectedResult);
     });
 
-    it('should call plainToClass with correct arguments', () => {
+    it("should call plainToClass with correct arguments", () => {
       const plainToClassSpy = jest
-        .spyOn(ClassTransformer, 'plainToClass')
+        .spyOn(ClassTransformer, "plainToClass")
         .mockImplementation();
 
-      Mapper.mapData(MockData, { name: 'John' });
+      Mapper.mapData(MockData, { name: "John" });
 
       expect(plainToClassSpy).toHaveBeenCalledWith(
         MockData,
-        { name: 'John' },
+        { name: "John" },
         {
           ...defaultOptions,
         },
@@ -43,14 +43,14 @@ describe('common mapper', () => {
     it("should pass options to plainToClass if they're provided", () => {
       const options = { version: 1 };
       const plainToClassSpy = jest
-        .spyOn(ClassTransformer, 'plainToClass')
+        .spyOn(ClassTransformer, "plainToClass")
         .mockImplementation();
 
-      Mapper.mapData(MockData, { name: 'John' }, options);
+      Mapper.mapData(MockData, { name: "John" }, options);
 
       expect(plainToClassSpy).toHaveBeenCalledWith(
         MockData,
-        { name: 'John' },
+        { name: "John" },
         {
           excludeExtraneousValues: true,
           exposeDefaultValues: true,
@@ -60,30 +60,30 @@ describe('common mapper', () => {
     });
   });
 
-  describe('mapArrayData', () => {
-    it('should return data from mapper', () => {
-      const expectedResult = { name: 'John' };
+  describe("mapArrayData", () => {
+    it("should return data from mapper", () => {
+      const expectedResult = { name: "John" };
       jest
-        .spyOn(ClassTransformer, 'plainToClass')
+        .spyOn(ClassTransformer, "plainToClass")
         .mockReturnValue(expectedResult);
 
-      const result = Mapper.mapArrayData(MockData, [{ name: 'John' }]);
+      const result = Mapper.mapArrayData(MockData, [{ name: "John" }]);
 
       expect(result).toStrictEqual([expectedResult]);
     });
 
-    it('should call plainToClass with correct arguments for each item in the array', () => {
+    it("should call plainToClass with correct arguments for each item in the array", () => {
       const options = { version: 1 };
       const plainToClassSpy = jest
-        .spyOn(ClassTransformer, 'plainToClass')
+        .spyOn(ClassTransformer, "plainToClass")
         .mockImplementation();
 
-      Mapper.mapArrayData(MockData, [{ name: 'John' }], options);
+      Mapper.mapArrayData(MockData, [{ name: "John" }], options);
 
       expect(plainToClassSpy).toHaveBeenNthCalledWith(
         1,
         MockData,
-        { name: 'John' },
+        { name: "John" },
         {
           ...defaultOptions,
           ...options,
@@ -92,14 +92,14 @@ describe('common mapper', () => {
     });
   });
 
-  describe('mapToPlain', () => {
-    it('should return mapped data from instanceToPlain', () => {
-      const expectedResult = { name: 'John' } as Record<string, any>;
+  describe("mapToPlain", () => {
+    it("should return mapped data from instanceToPlain", () => {
+      const expectedResult = { name: "John" } as Record<string, any>;
       jest
-        .spyOn(ClassTransformer, 'instanceToPlain')
+        .spyOn(ClassTransformer, "instanceToPlain")
         .mockReturnValue(expectedResult as Record<string, any>[]);
 
-      const result = Mapper.mapToPlain({ name: 'John' });
+      const result = Mapper.mapToPlain({ name: "John" });
 
       expect(result).toBe(expectedResult);
     });
@@ -107,13 +107,13 @@ describe('common mapper', () => {
     it("should pass options to instanceToPlain if they're provided", () => {
       const options = { version: 1 };
       const instanceToPlainSpy = jest
-        .spyOn(ClassTransformer, 'instanceToPlain')
+        .spyOn(ClassTransformer, "instanceToPlain")
         .mockImplementation();
 
-      Mapper.mapToPlain({ name: 'John' }, options);
+      Mapper.mapToPlain({ name: "John" }, options);
 
       expect(instanceToPlainSpy).toHaveBeenCalledWith(
-        { name: 'John' },
+        { name: "John" },
         {
           ...defaultOptions,
           ...options,
@@ -122,29 +122,29 @@ describe('common mapper', () => {
     });
   });
 
-  describe('mapToArrayPlain', () => {
-    it('should return data from mapper', () => {
-      const expectedResult = { name: 'John' } as Record<string, any>;
+  describe("mapToArrayPlain", () => {
+    it("should return data from mapper", () => {
+      const expectedResult = { name: "John" } as Record<string, any>;
       jest
-        .spyOn(ClassTransformer, 'instanceToPlain')
+        .spyOn(ClassTransformer, "instanceToPlain")
         .mockReturnValue(expectedResult as Record<string, any>[]);
 
-      const result = Mapper.mapToArrayPlain([{ name: 'John' }]);
+      const result = Mapper.mapToArrayPlain([{ name: "John" }]);
 
       expect(result).toStrictEqual([expectedResult]);
     });
 
-    it('should call instanceToPlain with correct arguments for each item in the array', () => {
+    it("should call instanceToPlain with correct arguments for each item in the array", () => {
       const options = { version: 1 };
       const instanceToPlainSpy = jest
-        .spyOn(ClassTransformer, 'instanceToPlain')
+        .spyOn(ClassTransformer, "instanceToPlain")
         .mockImplementation();
 
-      Mapper.mapToArrayPlain([{ name: 'John' }], options);
+      Mapper.mapToArrayPlain([{ name: "John" }], options);
 
       expect(instanceToPlainSpy).toHaveBeenNthCalledWith(
         1,
-        { name: 'John' },
+        { name: "John" },
         {
           ...defaultOptions,
           ...options,

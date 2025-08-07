@@ -38,7 +38,7 @@ export class AuthService {
       const [salt, storedHash] = user.password.split(".");
       const inputPasswordHash = (await scryptAsync(
         password,
-        salt,
+        salt as string,
         64,
       )) as Buffer;
       if (storedHash !== inputPasswordHash.toString("hex")) {
@@ -81,11 +81,10 @@ export class AuthService {
       const salt = randomBytes(9).toString("hex");
       const buffHash = (await scryptAsync(user.password, salt, 64)) as Buffer;
       const newUser: CreateUserDto = {
-        //...user,
         username: user.username,
         email: user.email,
         password: `${salt}.${buffHash.toString("hex")}`,
-        // hashedRefreshToken: "",
+        hashedRefreshToken: "",
       };
       return this.userService.create(newUser);
     } catch (e) {
@@ -130,7 +129,7 @@ export class AuthService {
     }
     const [salt, storedHash] = user.hashedRefreshToken.split(".");
     const inputRefreshToken = (
-      (await scryptAsync(refreshToken, salt, 64)) as Buffer
+      (await scryptAsync(refreshToken, salt as string, 64)) as Buffer
     ).toString("hex");
 
     if (storedHash !== inputRefreshToken) {
@@ -146,6 +145,23 @@ export class AuthService {
   async validateJwtUser(userId: string): Promise<string> {
     const user = await this.userService.findOne(userId);
     if (!user) throw new UnauthorizedException("User not found!");
-    return user.id; //todo change to single id
+    return user.id;
+  }
+
+  async validateUser(username: string, password: string): Promise<User | null> {
+    const user = await this.userService.findByUsername(username);
+    if (!user) {
+      throw new UnauthorizedException("User not found");
+    }
+    const [salt, storedHash] = user.password.split(".");
+    const inputPasswordHash = (await scryptAsync(
+      password,
+      salt as string,
+      64,
+    )) as Buffer;
+    if (storedHash !== inputPasswordHash.toString("hex")) {
+      throw new UnauthorizedException("Wrong Credentials");
+    }
+    return user;
   }
 }

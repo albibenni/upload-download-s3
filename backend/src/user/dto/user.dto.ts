@@ -30,8 +30,8 @@ export class CreateUserDto {
   @MinLength(6)
   password: string;
 
-  // @IsString()
-  // hashedRefreshToken: string;
+  @IsString()
+  hashedRefreshToken: string;
 
   @IsOptional()
   @IsEmail()

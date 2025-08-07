@@ -1,0 +1,21 @@
+meta {
+  name: delete user
+  type: http
+  seq: 12
+}
+
+delete {
+  url: http://localhost:8080/api/users/user
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzZDlhMTI4Ni1kNTdjLTQ2YzgtODgxOC0zMGYwYTc3ODZmYzEiLCJpYXQiOjE3NDQzODE1ODcsImV4cCI6MTc0NDQxNzU4N30.-4kr3anMR1aso2wl4xy6xo6YDPVqRUg3Qaxoy4ZXR3g
+}
+
+body:json {
+  {
+    "username": "tesat"
+  }
+}

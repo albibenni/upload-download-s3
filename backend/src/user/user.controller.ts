@@ -11,10 +11,9 @@ import {
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
-import { UserDto } from "./dto/user.dto";
-import { AuthService } from "src/auth/auth.service";
-import { RequestWithUser } from "src/auth/auth.controller";
-import { RolesGuard } from "src/auth/roles/roles.guard";
+import { UpdateUserDto, UserDto } from "./dto/user.dto";
+import { AuthService } from "@/auth/auth.service";
+import { RequestWithUser } from "@/auth/auth.controller";
 
 @Controller("users")
 export class UserController {
@@ -35,7 +34,7 @@ export class UserController {
 
   @Patch(":id")
   update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+    return this.userService.update(id, updateUserDto);
   }
 
   @Post("signout")
@@ -56,9 +55,6 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
-  //@SetMetadata("role", [Role.ADMIN])
-  //@Roles(Role.ADMIN, Role.EDITOR)
-  @UseGuards(RolesGuard)
   @UseGuards(JwtAuthGuard)
   @Delete(":username")
   remove(@Param("username") username: string) {

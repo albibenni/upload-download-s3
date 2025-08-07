@@ -10,17 +10,32 @@ services:
   #   networks:
   #     - my-network
 
+  # postgres:
+  #   container_name: albibenni
+  #   image: postgres
+  #   restart: always
+  #   ports:
+  #     - 5432:5432
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   env_file: .env.local
+  #   networks:
+  #     - my-network
   postgres:
-    hostname: database.local
-    image: postgres:15-alpine
-    env_file: .env.local
-    expose:
-      - "5432"
+    container_name: file
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
-    networks:
-      - my-network
+    # environment:
+    #   - POSTGRES_USER=${POSTGRES_USER}
+    #   - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    #   - POSTGRES_DB=${POSTGRES_DB}
+    env_file: .env.local
+    # networks:
+    #   - my-network
 
   # s3ninja:
   #   hostname: storage.local
@@ -32,22 +47,34 @@ services:
   #   networks:
   #     - my-network
   ## S3 Service
+  # minio:
+  #   container_name: aws-s3
+  #   image: minio/minio
+  #   ports:
+  #     - "9000:9000"
+  #     - "9001:9001"
+  #   volumes:
+  #     - ./docker/minio-storage:/home/data
+  #   command: server --console-address ":9001" /data
+  #   env_file: .env.local
+  #   restart: always
+
   minio:
-    container_name: minio
+    container_name: aws-s3
     image: minio/minio
     ports:
       - "9000:9000"
       - "9001:9001"
     volumes:
-      - ./docker/minio-storage:/home/data
+      - ./docker/minio-storage:/data
     command: server --console-address ":9001" /data
     env_file: .env.local
     restart: always
-
+    # networks:
+    #   - my-network
 volumes:
   postgres_data:
-  s3ninja_data:
-
-networks:
-  my-network:
-    driver: bridge
+  minio_storage:
+# networks:
+#   my-network:
+#     driver: bridge

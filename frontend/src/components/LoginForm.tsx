@@ -9,12 +9,9 @@ import {
   Alert,
 } from "@mui/material";
 import { LoginFormData, LoginSchema } from "../types/types";
+import { API_PATHS } from "../api/paths";
 
-interface LoginFormProps {
-  onLogin?: (username: string, password: string) => void;
-}
-
-export function LoginForm({ onLogin }: LoginFormProps) {
+export function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<Partial<LoginFormData>>({});
@@ -38,9 +35,16 @@ export function LoginForm({ onLogin }: LoginFormProps) {
 
     setLoading(true);
     try {
-      if (onLogin) {
-        onLogin(result.data.username, result.data.password);
-      }
+      await fetch(API_PATHS.USER.LOGIN, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+      alert(`Logged in as ${username}`);
+      // Reset form
+      setUsername("");
+      setPassword("");
+      setGeneralError("");
     } catch (err) {
       setGeneralError(err instanceof Error ? err.message : "Login failed");
     } finally {

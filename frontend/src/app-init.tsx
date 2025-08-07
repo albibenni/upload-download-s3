@@ -11,15 +11,11 @@ import theme from "./theme";
 import { LandingPage } from "./components/LandingPage";
 
 function App() {
-  const handleLogin = async (username: string, password: string) => {
-    console.log("Login attempt:", { username, password });
-  };
-
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <LandingPage onLogin={handleLogin} />
+        <LandingPage />
       </ThemeProvider>
     </StyledEngineProvider>
   );

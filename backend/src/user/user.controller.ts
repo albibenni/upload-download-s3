@@ -12,8 +12,9 @@ import {
 import { UserService } from "./user.service";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
 import { UpdateUserDto, UserDto } from "./dto/user.dto";
-import { AuthService } from "@/auth/auth.service";
+import { AuthService, type Tokens } from "@/auth/auth.service";
 import { RequestWithUser } from "@/auth/auth.controller";
+import type { User } from "./entities/user.entity";
 
 @Controller("users")
 export class UserController {
@@ -23,12 +24,14 @@ export class UserController {
   ) {}
 
   @Post("signup")
-  signup(@Body() body: UserDto) {
+  signup(@Body() body: UserDto): Promise<User | undefined> {
     return this.authService.signup(body);
   }
 
   @Post("signin")
-  signin(@Body() body: Pick<UserDto, "username" | "password">) {
+  signin(
+    @Body() body: Pick<UserDto, "username" | "password">,
+  ): Promise<Tokens | undefined> {
     return this.authService.signIn(body.username, body.password);
   }
 
@@ -39,25 +42,25 @@ export class UserController {
 
   @Post("signout")
   @UseGuards(JwtAuthGuard)
-  signout(@Req() req: RequestWithUser) {
+  signout(@Req() req: RequestWithUser): Promise<void> {
     return this.authService.signout(req.user.id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll() {
+  findAll(): Promise<User[]> {
     return this.userService.findAll();
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(":id")
-  findOne(@Param("id") id: string) {
+  findOne(@Param("id") id: string): Promise<User> {
     return this.userService.findByUserId(id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(":username")
-  remove(@Param("username") username: string) {
+  remove(@Param("username") username: string): Promise<void> {
     return this.userService.remove(username);
   }
 }

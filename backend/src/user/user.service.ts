@@ -33,7 +33,7 @@ export class UserService {
     return this.userRepository.find();
   }
 
-  async findOne(id: string): Promise<User> {
+  async findByUserId(id: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: { id },
     });

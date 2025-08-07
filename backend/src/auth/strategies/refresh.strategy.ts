@@ -18,7 +18,9 @@ export class RefreshJwtStrategy extends PassportStrategy(
     private refreshTokenConfig: ConfigType<typeof refreshJwtConfig>,
     private authService: AuthService,
   ) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     super({
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: refreshTokenConfig.secret ?? "",
       ignoreExpiration: false,
@@ -44,7 +46,7 @@ export class RefreshJwtStrategy extends PassportStrategy(
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     const refreshToken = bearerTokenSchema.parse(req.headers["authorization"]);
-    console.log("REEEEEEEE - freshing", refreshToken);
+    console.log("REfreshing", refreshToken);
 
     if (!refreshToken) {
       throw new Error("Wrong Refresh token");

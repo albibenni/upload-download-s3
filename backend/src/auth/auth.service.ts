@@ -122,7 +122,7 @@ export class AuthService {
     userId: string,
     refreshToken: string,
   ): Promise<{ id: string }> {
-    const user = await this.userService.findOne(userId);
+    const user = await this.userService.findByUserId(userId);
 
     if (!user || !user.hashedRefreshToken) {
       throw new UnauthorizedException("Invalid refresh token");
@@ -143,7 +143,7 @@ export class AuthService {
   }
 
   async validateJwtUser(userId: string): Promise<string> {
-    const user = await this.userService.findOne(userId);
+    const user = await this.userService.findByUserId(userId);
     if (!user) throw new UnauthorizedException("User not found!");
     return user.id;
   }

@@ -40,7 +40,7 @@ const config = {
     database: process.env.POSTGRES_DB ?? "",
     url:
       process.env.DB_URL ??
-      "postgresql://albibenni:password@localhost:5432/albibenni",
+      "postgresql://albibenni:password@localhost:5432/file",
   },
   minio: {
     root_user: process.env.MINIO_ROOT_USER ?? "admin",
@@ -49,13 +49,13 @@ const config = {
     admin_port: parseInt(process.env.MINIO_ADMIN_PORT ?? "9000"),
   },
   aws: {
-    endpoint: process.env.ENDPOINT ?? "",
-    bucket: process.env.S3_BUCKET ?? "",
-    region: process.env.REGION ?? "",
-    access_key: process.env.ACCESS_KEY ?? "",
-    secret_key: process.env.SECRET_ACCESS_KEY ?? "",
-    ssl: process.env.SSL ?? false,
-    force_path_style: process.env.FORCE_STYLE ?? false,
+    endpoint: process.env.AWS_ENDPOINT ?? "",
+    bucket: process.env.AWS_S3_BUCKET ?? "",
+    region: process.env.AWS_REGION ?? "",
+    access_key: process.env.AWS_ACCESS_KEY ?? "",
+    secret_key: process.env.AWS_SECRET_ACCESS_KEY ?? "",
+    tsl: process.env.SSL ?? false,
+    force_path_style: process.env.AWS_FORCE_STYLE ?? false,
   },
 };
 export default config;

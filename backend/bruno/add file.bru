@@ -1,0 +1,25 @@
+meta {
+  name: add file
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://localhost:8080/api/files/upload
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhOTlmZGZjYS1iYTEyLTQ1MDItODA2Yy00YmRlZGY5YzgxMTUiLCJpYXQiOjE3NTQ1Njg5NzYsImV4cCI6MTc1NDYwNDk3Nn0.lznKxt4u4_mBR2xLTaUjcPLRlTNDfutlmgrXcQlbiJ0
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhOTlmZGZjYS1iYTEyLTQ1MDItODA2Yy00YmRlZGY5YzgxMTUiLCJpYXQiOjE3NTQ1Njg5NzYsImV4cCI6MTc1NDYwNDk3Nn0.lznKxt4u4_mBR2xLTaUjcPLRlTNDfutlmgrXcQlbiJ0
+}
+
+body:json {
+  {
+    "filename": "test"
+  }
+}

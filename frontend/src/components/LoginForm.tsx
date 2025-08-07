@@ -11,7 +11,11 @@ import {
 import { LoginFormData, LoginSchema } from "../types/types";
 import { API_PATHS } from "../api/paths";
 
-export function LoginForm() {
+interface LoginFormProps {
+  onLoginSuccess: () => void;
+}
+
+export function LoginForm({ onLoginSuccess }: LoginFormProps) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<Partial<LoginFormData>>({});
@@ -23,7 +27,6 @@ export function LoginForm() {
     setErrors({});
     const result = LoginSchema.safeParse({ username, password });
     if (!result.success) {
-      // Extract field-specific errors
       const fieldErrors: Partial<LoginFormData> = {};
       result.error.issues.forEach((error) => {
         const field = error.path[0] as keyof LoginFormData;
@@ -35,16 +38,30 @@ export function LoginForm() {
 
     setLoading(true);
     try {
-      await fetch(API_PATHS.USER.LOGIN, {
+      const res = await fetch(API_PATHS.USER.LOGIN, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
+
+      if (!res.ok) {
+        throw new Error("Login failed");
+      }
+
+      const data = await res.json();
+
+      // Store tokens
+      localStorage.setItem("access_token", data.access_token);
+      console.log("Login successful:", data);
+
       alert(`Logged in as ${username}`);
       // Reset form
       setUsername("");
       setPassword("");
       setGeneralError("");
+      
+      // Call the success callback
+      onLoginSuccess?.();
     } catch (err) {
       setGeneralError(err instanceof Error ? err.message : "Login failed");
     } finally {

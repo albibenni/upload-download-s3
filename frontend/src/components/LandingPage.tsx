@@ -1,7 +1,19 @@
 import { Box, Container, Typography, Paper, Grid } from "@mui/material";
+import { useState, useEffect } from "react";
 import { LoginForm } from "./LoginForm";
 
 export function LandingPage() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true);
+  };
+
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "grey.50", py: 8 }}>
       <Container maxWidth="md">
@@ -59,9 +71,11 @@ export function LandingPage() {
             </Box>
           </Grid>
 
-          <Grid size={{ xs: 12, md: 6 }}>
-            <LoginForm />
-          </Grid>
+          {!isLoggedIn && (
+            <Grid size={{ xs: 12, md: 6 }}>
+              <LoginForm onLoginSuccess={handleLoginSuccess} />
+            </Grid>
+          )}
         </Grid>
       </Container>
     </Box>

@@ -36,6 +36,9 @@ export class AddFileDto {
   @IsString()
   @MaxLength(255)
   filename: string;
+
+  @IsString()
+  mimetype: string;
 }
 
 export class UpdateFileDto {

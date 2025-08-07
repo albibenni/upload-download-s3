@@ -31,7 +31,6 @@ export class FileService {
     const existingFile: File | null = await this.fileRepository.findOne({
       where: { filename: addFileDto.filename },
     });
-    console.log(existingFile, "hereeeee");
 
     if (existingFile) {
       throw new ConflictException("Filename already exists");
@@ -47,6 +46,7 @@ export class FileService {
       config.aws.bucket,
       user.username,
       addFileDto.filename,
+      addFileDto.mimetype || "application/octet-stream",
     );
     if (!presignedUrl) {
       throw new NotFoundException("Presigned URL could not be created");
@@ -55,7 +55,7 @@ export class FileService {
       ...addFileDto,
       username: user.username,
     });
-    void this.fileRepository.save(fileUploaded);
+    await this.fileRepository.save(fileUploaded);
     return {
       id: fileUploaded.id,
       filename: fileUploaded.filename,

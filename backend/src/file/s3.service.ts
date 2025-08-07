@@ -57,7 +57,7 @@ export async function createPresignedUrl(
   bucketName: string,
   folderName: string, // client
   filename: string,
-  //mimetype: string,
+  mimetype: string,
 ): Promise<string | undefined> {
   try {
     const url = await getSignedUrl(
@@ -65,7 +65,7 @@ export async function createPresignedUrl(
       new PutObjectCommand({
         Bucket: bucketName,
         Key: `${folderName}/${filename}`,
-        //ContentType: mimetype,
+        ContentType: mimetype,
       }),
       {
         expiresIn: 60 * 10,

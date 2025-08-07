@@ -22,6 +22,8 @@ export class FileController {
     @Req() req: RequestWithUser,
   ): Promise<UploadFileDto> {
     const userId = req.user.id;
+    console.log("BODY", body);
+
     return this.fileService.addFile(body, userId);
   }
 }

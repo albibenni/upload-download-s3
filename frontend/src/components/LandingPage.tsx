@@ -1,6 +1,7 @@
 import { Box, Container, Typography, Paper, Grid } from "@mui/material";
 import { useState, useEffect } from "react";
 import { LoginForm } from "./LoginForm";
+import { UploadPage } from "./UploadPage";
 
 export function LandingPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -13,6 +14,10 @@ export function LandingPage() {
   const handleLoginSuccess = () => {
     setIsLoggedIn(true);
   };
+
+  if (isLoggedIn) {
+    return <UploadPage />;
+  }
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "grey.50", py: 8 }}>
@@ -71,11 +76,9 @@ export function LandingPage() {
             </Box>
           </Grid>
 
-          {!isLoggedIn && (
-            <Grid size={{ xs: 12, md: 6 }}>
-              <LoginForm onLoginSuccess={handleLoginSuccess} />
-            </Grid>
-          )}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <LoginForm onLoginSuccess={handleLoginSuccess} />
+          </Grid>
         </Grid>
       </Container>
     </Box>

@@ -6,12 +6,17 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { File } from "./entities/file.entity";
-import { handleErrorLog } from "@/utils/utils";
-import { createPresignedUrl, getClient, getListOfFiles } from "./s3.service";
+import {
+  createPresignedUrl,
+  deleteFile,
+  getClient,
+  getListOfFiles,
+  getPresignedUrl,
+} from "./s3.service";
 import { AddFileDto, UploadFileDto } from "./dtos/file.dto";
 import { User } from "@/user/entities/user.entity";
-import { UpdateUserDto } from "@/user/dto/user.dto";
 import config from "@/configs/env-config";
+import { handleErrorLog } from "@/utils/utils";
 
 @Injectable()
 export class FileService {
@@ -76,53 +81,33 @@ export class FileService {
     return list;
   }
 
-  // async findAllProtected(userId: string): Promise<string[]> {
-  //   const
-  // }
-  async findOne(id: string): Promise<User> {
-    const user = await this.userRepository.findOne({
-      where: { id },
-    });
-
-    if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found`);
+  async getFile(filePath: string): Promise<string> {
+    const filesSplit = filePath.split("/");
+    if (filesSplit.length < 2) {
+      throw new NotFoundException(`File path is not valid`);
     }
-
-    return user;
-  }
-
-  async updateRefreshToken(refreshToken: string, userId: string) {
-    return await this.userRepository.update(
-      { id: userId },
-      { hashedRefreshToken: refreshToken },
+    const fileName = filesSplit.pop()!;
+    const folderPath = filesSplit.join("/");
+    const presignedUrl = await getPresignedUrl(
+      this.awsClient,
+      config.aws.bucket,
+      folderPath,
+      fileName,
     );
-  }
-
-  async findByUsername(username: string): Promise<User> {
-    const user = await this.userRepository.find({ where: { username } });
-
-    if (user.length === 0) {
-      throw new NotFoundException(`User with username ${username} not found`);
+    if (!presignedUrl) {
+      throw new NotFoundException(`Presigned not created`);
     }
-
-    return user[0]!;
+    return presignedUrl;
   }
 
-  async update(
-    username: string,
-    updateUserDto: UpdateUserDto,
-  ): Promise<User | undefined> {
+  async deleteFile(filePath: string): Promise<void> {
     try {
-      const user = await this.findByUsername(username);
-      Object.assign(user, updateUserDto);
-      return this.userRepository.save(user);
+      await deleteFile(this.awsClient, config.aws.bucket, filePath);
+      await this.fileRepository.delete({
+        filename: filePath.split("/").pop()!,
+      });
     } catch (error) {
       handleErrorLog(error);
     }
-  }
-
-  async remove(username: string): Promise<void> {
-    const user = await this.findByUsername(username);
-    await this.userRepository.remove(user);
   }
 }

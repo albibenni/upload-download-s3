@@ -1,5 +1,6 @@
 import {
   CreateBucketCommand,
+  DeleteObjectCommand,
   GetObjectCommand,
   ListObjectsCommand,
   PutObjectCommand,
@@ -116,6 +117,22 @@ export async function getListOfFiles(
     return response.Contents.filter(
       (file): file is { Key: string } => file.Key !== undefined,
     ).map((file) => file.Key);
+  } catch (e) {
+    handleErrorLog(e);
+  }
+}
+
+export async function deleteFile(
+  client: S3Client,
+  bucketName: string,
+  filePath: string,
+): Promise<string | undefined> {
+  try {
+    await client.send(
+      new DeleteObjectCommand({ Bucket: bucketName, Key: filePath }),
+    );
+
+    return filePath;
   } catch (e) {
     handleErrorLog(e);
   }

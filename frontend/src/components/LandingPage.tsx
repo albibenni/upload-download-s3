@@ -1,7 +1,7 @@
 import { Box, Container, Typography, Paper, Grid } from "@mui/material";
 import { useState, useEffect } from "react";
 import { LoginForm } from "./LoginForm";
-import { UploadPage } from "./UploadPage";
+import { NavigationMenu } from "./NavigationMenu";
 
 export function LandingPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -15,8 +15,18 @@ export function LandingPage() {
     setIsLoggedIn(true);
   };
 
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
   if (isLoggedIn) {
-    return <UploadPage />;
+    return (
+      <Box sx={{ minHeight: "100vh", bgcolor: "grey.50", py: 4 }}>
+        <Container maxWidth="lg">
+          <NavigationMenu onLogout={handleLogout} />
+        </Container>
+      </Box>
+    );
   }
 
   return (

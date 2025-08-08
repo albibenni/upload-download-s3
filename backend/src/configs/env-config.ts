@@ -54,7 +54,7 @@ const config = {
     region: process.env.AWS_REGION ?? "",
     access_key: process.env.AWS_ACCESS_KEY ?? "",
     secret_key: process.env.AWS_SECRET_ACCESS_KEY ?? "",
-    tsl: process.env.SSL ?? false,
+    tsl: process.env.TSL ?? false,
     force_path_style: process.env.AWS_FORCE_STYLE ?? false,
   },
 };

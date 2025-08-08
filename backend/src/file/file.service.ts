@@ -66,7 +66,6 @@ export class FileService {
     };
   }
 
-  // todo manage file related to user - roles?
   async findAll(): Promise<string[]> {
     const list = await getListOfFiles(this.awsClient, config.aws.bucket);
     if (!list) {
@@ -74,10 +73,6 @@ export class FileService {
         `List of File not found in bucket ${config.aws.bucket}`,
       );
     }
-    // const urls = await getPresignedUrl(
-    //   this.awsClient,
-    //   config.aws.bucket,
-    //   "")
     return list;
   }
 

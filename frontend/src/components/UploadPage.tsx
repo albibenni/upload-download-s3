@@ -1,4 +1,4 @@
-import { CloudUpload } from "@mui/icons-material";
+import { CloudUpload, ArrowBack } from "@mui/icons-material";
 import {
   Alert,
   Box,
@@ -10,10 +10,12 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { API_PATHS } from "../api/paths";
 import { UploadFileSchema, UploadFormData, UploadSchema } from "../types/types";
 
 export function UploadPage() {
+  const navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [filename, setFilename] = useState("");
   const [uploading, setUploading] = useState(false);
@@ -37,7 +39,6 @@ export function UploadPage() {
     setErrors({});
     setUploadStatus({ type: null, message: "" });
 
-    // Validate file selection
     if (!selectedFile) {
       setUploadStatus({
         type: "error",
@@ -46,7 +47,6 @@ export function UploadPage() {
       return;
     }
 
-    // Validate form data with Zod
     const result = UploadSchema.safeParse({ filename });
     if (!result.success) {
       const fieldErrors: Partial<UploadFormData> = {};
@@ -58,7 +58,6 @@ export function UploadPage() {
       return;
     }
 
-    // Check authentication
     const token = localStorage.getItem("access_token");
     if (!token) {
       setUploadStatus({
@@ -79,7 +78,7 @@ export function UploadPage() {
         },
         body: JSON.stringify({
           filename: filename.trim(),
-          mimeType: selectedFile.type,
+          mimetype: selectedFile.type,
         }),
       });
 
@@ -123,6 +122,16 @@ export function UploadPage() {
   return (
     <Container maxWidth="md">
       <Box sx={{ py: 4 }}>
+        <Box sx={{ mb: 3 }}>
+          <Button
+            startIcon={<ArrowBack />}
+            onClick={() => navigate("/")}
+            variant="outlined"
+          >
+            Back to Dashboard
+          </Button>
+        </Box>
+        
         <Typography variant="h3" component="h1" gutterBottom align="center">
           Upload Files
         </Typography>

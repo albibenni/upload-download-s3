@@ -14,7 +14,7 @@ export const API_PATHS = {
   FILES: {
     UPLOAD: `${API_BASE_URL}/files/upload`,
     DOWNLOAD: (fileId: string) => `${API_BASE_URL}/files/download/${fileId}`,
-    LIST: `${API_BASE_URL}/files`,
+    LIST: `${API_BASE_URL}/files/all`,
     DELETE: (fileId: string) => `${API_BASE_URL}/files/${fileId}`,
   },
 } as const;
